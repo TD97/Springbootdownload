@@ -16,11 +16,41 @@
 <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
 </head>
 <head>
-    <title>Download CSV File - simplesolution.dev</title>
+    <title>Download CSV File </title>
 </head>
 <body>
-<h1>Spring Boot Web Application Download CSV File</h1>
-<a href="http://localhost:8080/api/csv/download">Download employee.csv</a>
+<div class="container my-2" align="center">
+
+<h3>Book List</h3>
+	<table style="width:90%" border="1"
+		class = "table table-striped table-responsive-md">
+	<thead>
+<tr>
+	<th>Id</th>
+	<th>Title</th>
+	<th>Description</th>
+		<th>Published</th>
+	
+</tr>
+</thead>
+<tbody>
+<tr th:each="employee:${allemplist}">
+		<td th:text="${employee.id}"></td>
+		<td th:text="${employee.title}"></td>
+				<td th:text="${employee.description}"></td>
+								<td th:text="${employee.published}"></td>
+				
+		
+			
+		
+				
+	</td>
+</tr>
+</tbody>
+</table>
+<a th:href="@{/api/csv/download}"class="btn btn-primary">Download Book List</a>
+
+</div>
 
 </body>
 </html>

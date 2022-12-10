@@ -16,7 +16,10 @@ import csv.download.demo.entity.*;
 public class CSVHelper {
 
   public static ByteArrayInputStream testToCSV(List<Student> test) {
-    final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
+	    final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
+	    final CSVFormat format1 = CSVFormat.EXCEL.withAllowDuplicateHeaderNames(true);
+
+
 
     try (ByteArrayOutputStream out = new ByteArrayOutputStream();
         CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {

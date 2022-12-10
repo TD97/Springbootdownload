@@ -17,15 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import com.lowagie.text.DocumentException;
-import csv.download.demo.util.PDFGenerator;
 import csv.download.demo.repository.*;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -46,13 +43,17 @@ public class CSVController {
   @Autowired
   CSVService fileService;
  
-  
+  @GetMapping("/index1")
+	public String viewHomePage(Model model) {
+		model.addAttribute("allemplist", fileService.findAllStudents());
+		return "index";
+	}
 
  
   
   @GetMapping("/download")
   public ResponseEntity<Resource> getFile() {
-    String filename = "tutorials.csv";
+    String filename = "Booklist.csv";
     InputStreamResource file = new InputStreamResource(fileService.load());
 
     return ResponseEntity.ok()
@@ -66,24 +67,7 @@ public class CSVController {
   }
   
 
-  
-  @GetMapping("/download/pdf")
-	public void generatePdf(HttpServletResponse response) throws DocumentException, IOException {
-	  response.setContentType("application/pdf");
-	
-		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
-		String currentDateTime = dateFormat.format(new Date());
-		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-		response.setHeader(headerkey, headervalue);
-		
-		List<Student> studentList = fileService.findAllStudents();
-		
-		PDFGenerator generator = new PDFGenerator(studentList);
-		
-		generator.generate(response);
-		
-	}
+ 
   
   
   

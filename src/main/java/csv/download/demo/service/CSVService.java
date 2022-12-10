@@ -10,7 +10,6 @@ import csv.download.demo.controller.*;
 import csv.download.demo.entity.*;
 import csv.download.demo.repository.*;
 import csv.download.demo.helper.*;
-import csv.download.demo.util.*;
 
 @Service
 public class CSVService {
@@ -18,8 +17,7 @@ public class CSVService {
   @Autowired
   StudentRepository repository;
   public List<Student> findAllStudents() {
-	  List<Student> test= repository.findAll();
-	  return repository.findAll();
+	  return this.repository.findAll();
 		
 	}
   
@@ -34,5 +32,10 @@ public class CSVService {
   public void save(Student student) {
 		repository.save(student);
 	}
+  public CSVService(StudentRepository repository)
+  {
+      // this keyword refers to current instance
+      this.repository=repository;
+  }
 
 }
