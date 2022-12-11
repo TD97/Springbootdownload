@@ -1,3 +1,5 @@
+csv\download\demo\CSVHelperTest.class
 csv\download\demo\CsvdownloadTests.class
 csv\download\demo\PersonServiceTest.class
 csv\download\demo\StudentRepositoryTest.class
+csv\download\demo\CsvControllerTest.class
