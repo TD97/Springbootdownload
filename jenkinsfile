@@ -1,0 +1,81 @@
+pipeline{
+    agent any
+    tools {
+        maven "maven"
+        jdk "jdk"
+    }
+    environment {
+        PATH = "$PATH:/opt/apache-maven-3.8.6/bin"
+    }
+    stages{
+         stage('Initialize'){
+            steps{
+                echo "PATH = ${M2_HOME}/bin:${PATH}"
+                echo "M2_HOME = /opt/apache-maven-3.8.6"
+            }
+        }
+       stage('GetCode'){
+            steps{
+                git 'https://github.com/TD97/Springbootdownload.git'
+            }
+         }  
+         stage('UNIT TEST'){
+            steps{
+                bat 'mvn test'
+            }
+         } 
+          stage('Integration TEST'){
+            steps{
+                bat 'mvn verify -DskipUnitTests'
+            }
+         } 
+       stage('Build') {
+            steps {
+                 
+               bat 'mvn clean install'
+                
+            }
+            
+            }
+            stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'SonarQubeScanner'
+    }
+    steps {
+        withSonarQubeEnv('sonarqube') {
+            bat 'mvn sonar:sonar'
+        }
+  
+}
+
+}
+ stage('Build Docker Image'){
+     steps {
+     bat 'docker build -t td97/app3 .'
+   }
+ }
+
+  
+ stage('Push Docker Image'){
+     steps{
+         withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubpwd')]) {
+              bat "docker login -u td97 -p ${dockerHubPwd}"
+}
+     bat 'docker push td97/app3'
+   }
+
+}
+ stage('Run Docker Image'){
+     steps {
+     bat 'docker run -p 9090:8080 --name springapp6 --net spring-net -e MYSQL_HOST=mysqldb -e MYSQL_PASSWORD=root -e MYSQL_PORT=3306 td97/app3'
+   }
+ }
+
+
+
+}
+}
+
+
+    
+
